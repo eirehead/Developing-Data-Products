@@ -1,26 +1,38 @@
 library(shiny)
 
-# Define UI for miles per gallon application
+# Define UI for application that plots random distributions 
 shinyUI(pageWithSidebar(
   
   # Application title
-  headerPanel("Temp against other variables"),
+  headerPanel("Classical Central Limit Theorem"),
   
-  # Sidebar with controls to select the variable to plot against mpg
-  # and to specify whether outliers should be included
+  # Sidebar with a slider input for number of observations
   sidebarPanel(
-    selectInput("variable", "Variable:",
-                list("Ozone" = "Ozone", 
-                     "Solar" = "Solar.R", 
-                     "Wind" = "Wind")),
+    sliderInput("n", 
+                "Number of samples:", 
+                min = 1,
+                max = 2500, 
+                value = 100),
+    sliderInput("bins", 
+                "Number of bins:", 
+                min = 1,
+                max = 100, 
+                value = 20),
+    withMathJax(),
+    uiOutput('population_mean'),
+    uiOutput('sample_means_mean'),
+    uiOutput('population_sd'),
+    uiOutput('sample_means_mean_sd'),
     
-    checkboxInput("outliers", "Show outliers", FALSE)
+    h4("Documentation"),
+    helpText("The app allows you to experiment with the one of the theorem of statistics."),
+    helpText("Experiment around with the Number of samples and the Number of bins."),
+    withMathJax(helpText("Hope this app helps."))
   ),
   
-  # Show the caption and plot of the requested variable against mpg
+  # Show a plot of the generated distribution
   mainPanel(
-    h3(textOutput("caption")),
-    
-    plotOutput("mpgPlot")
+    plotOutput("distPlot", height = "300px", width="80%"),
+    plotOutput("sampleDistPlot", height = "300px", width="80%")
   )
 ))
